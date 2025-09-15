@@ -63,4 +63,4 @@ if __name__ == "__main__":
     ]
 
     # 生成图片
-    create_multi_qr_image(qr_data, "multi_qr_codes.jpg", cols=3, size=300, spacing=30)
+    create_multi_qr_image(qr_data, "pic_s/multi_qr_codes.png", cols=3, size=300, spacing=30)

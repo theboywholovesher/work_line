@@ -51,8 +51,9 @@ def read_dataset(pic_path):
     pics = os.listdir(pic_path)
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
         for pic in pics:
-            pic_data = cv2.imread(pic_path+"/" + pic)
-            executor.submit(simple_detect_and_show, pic=pic_data)
+            with open('pic_s/'+pic, 'rb') as f:
+                image_data = f.read()
+            executor.submit(simple_detect_and_show, pic=image_data)
 
 
 def read_kafka(topic, bootstrap_servers):

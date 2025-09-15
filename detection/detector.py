@@ -20,14 +20,16 @@ CACHE_EXPIRE_SECONDS = 300
 def simple_detect_and_show(pic):
     # 读取图像
     nparr = np.frombuffer(pic, np.uint8)
+    print(len(nparr))
     # 解码为 OpenCV 图像
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    print(len(img))
     # 执行检测
     res = []
     if img is None:
         print("无法解码图像数据")
         return
-    results = model(source=img, conf=0.3, verbose=False, device=0 if torch.cuda.is_available() else "cpu")
+    results = model(source=img, conf=0.1, verbose=False, device=0 if torch.cuda.is_available() else "cpu")
     for box in results[0].boxes:
         x1, y1, x2, y2 = map(int, box.xyxy[0])
         roi = img[int(y1) - 10:int(y2) + 10, int(x1) - 10:int(x2) + 10]
@@ -38,7 +40,7 @@ def simple_detect_and_show(pic):
     gc.collect()  # 强制垃圾回收
     work_time = time.time() - start_time
     print(res)
-    file_path = "./data/" + str(int(work_time / 30)) + '.txt'
+    file_path = "data/" + str(int(work_time / 30)) + '.txt'
     threading.Thread(target=data_keep, args=(file_path, res)).start()
     for data in res:
         if data is not None and data.startswith("http"):
