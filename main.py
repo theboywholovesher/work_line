@@ -1,5 +1,4 @@
 import config
-import time
 from data_get.data_score import process_server_stream, read_kafka, read_dataset
 
 

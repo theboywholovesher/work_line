@@ -30,18 +30,19 @@ def simple_detect_and_show(pic):
         print("无法解码图像数据")
         return
     results = model(source=img, conf=0.1, verbose=False, device=0 if torch.cuda.is_available() else "cpu")
+    print(len(results))
     for box in results[0].boxes:
         x1, y1, x2, y2 = map(int, box.xyxy[0])
         roi = img[int(y1) - 10:int(y2) + 10, int(x1) - 10:int(x2) + 10]
         data, bbox, _ = qr_detector.detectAndDecode(roi)
-        if data:
+        if data and data not in res:
             res.append(data)
-    del img  # 手动删除大对象
-    gc.collect()  # 强制垃圾回收
-    work_time = time.time() - start_time
+    del img
+    gc.collect()
+    # work_time = time.time() - start_time
     print(res)
-    file_path = "data/" + str(int(work_time / 30)) + '.txt'
-    threading.Thread(target=data_keep, args=(file_path, res)).start()
-    for data in res:
-        if data is not None and data.startswith("http"):
-            r = requests.get(data)
+    # file_path = "data/" + str(int(work_time / 30)) + '.txt'
+    # threading.Thread(target=data_keep, args=(file_path, res)).start()
+    # for data in res:
+    #     if data is not None and data.startswith("http"):
+    #         r = requests.get(data)

@@ -49,11 +49,10 @@ def topic_make(bvid):
 
 def read_dataset(pic_path):
     pics = os.listdir(pic_path)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-        for pic in pics:
-            with open('pic_s/'+pic, 'rb') as f:
-                image_data = f.read()
-            executor.submit(simple_detect_and_show, pic=image_data)
+    for pic in pics:
+        with open('pic_s/'+pic, 'rb') as f:
+            image_data = f.read()
+            simple_detect_and_show(pic=image_data)
 
 
 def read_kafka(topic, bootstrap_servers):
